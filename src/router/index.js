@@ -6,7 +6,7 @@ import Demo from '@/components/HelloWorld'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   history: true,
   mode: 'history',
   routes: [
@@ -18,7 +18,10 @@ export default new Router({
     {
       path: '/dashboard',
       name: 'Dashboard',
-      component: Dashboard
+      component: Dashboard,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/demo',
@@ -27,3 +30,19 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    const loggedIn = localStorage.getItem('user')
+    console.log(!loggedIn)
+    if (!loggedIn) {
+      next('/')
+    } else {
+      next()
+    }
+  } else {
+    next() // make sure to always call next()!
+  }
+})
+
+export default router
