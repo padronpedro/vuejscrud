@@ -6,9 +6,17 @@ import router from './router'
 import vuetify from '@/plugins/vuetify' // path to vuetify export
 import VueI18n from 'vue-i18n'
 import esMessages from '@/lang/es.json'
+import store from './store'
+import axios from 'axios'
 
 Vue.config.productionTip = false
 Vue.use(VueI18n)
+
+const axiosConfig = axios.create({
+  baseURL: 'http://localhost:8090/api/'
+})
+
+Vue.prototype.$axios = axiosConfig
 
 var messages = {
   es: esMessages
@@ -34,6 +42,7 @@ new Vue({
   router,
   vuetify,
   i18n,
+  store,
   components: { App },
   template: '<App/>'
 })
