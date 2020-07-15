@@ -7,6 +7,7 @@
       <v-list dense>
         <p-list-item :toPath="'Dashboard'" :iconName="'mdi-home'" :textTitle="$t('Home')" />
         <p-list-item :toPath="'Login'" :iconName="'mdi-home'" :textTitle="$t('Log in')" />
+        <v-icon @click="test">mdi-logout</v-icon>
       </v-list>
     </v-navigation-drawer>
 
@@ -18,6 +19,8 @@
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>CRUD Demo</v-toolbar-title>
+      <v-spacer />
+      <v-icon @click="logout">mdi-logout</v-icon>
     </v-app-bar>
 
     <v-main>
@@ -38,6 +41,8 @@
 </template>
 
 <script>
+import authHeader from './services/auth-header'
+
 export default {
   name: 'App',
   props: {
@@ -52,6 +57,20 @@ export default {
   methods: {
     toggleDrawer: function () {
       this.drawer = !this.drawer
+    },
+    logout: function () {
+      this.$store.dispatch('auth/logout', this.user).then(
+        this.$router.push({ name: 'Login' }).catch(err => { err = null })
+      )
+    },
+    test: function () {
+      this.$axios.get('/test/admin', { headers: authHeader() })
+        .then(response => {
+          console.log(response)
+        })
+        .catch(error => {
+          console.log('Get Clients error: ', error)
+        })
     }
   }
 }
