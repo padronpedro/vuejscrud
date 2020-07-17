@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/pages/Login'
 import Dashboard from '@/components/pages/Dashboard'
+import Register from '@/components/pages/Register'
 import Demo from '@/components/HelloWorld'
 
 Vue.use(Router)
@@ -14,6 +15,11 @@ const router = new Router({
       path: '/',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: Register
     },
     {
       path: '/dashboard',

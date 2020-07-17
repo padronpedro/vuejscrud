@@ -10,24 +10,42 @@ import store from './store'
 import axios from 'axios'
 
 Vue.config.productionTip = false
+
 Vue.use(VueI18n)
-
-const axiosConfig = axios.create({
-  baseURL: 'http://localhost:8090/api/'
-})
-
-Vue.prototype.$axios = axiosConfig
-
 var messages = {
   es: esMessages
 }
-
 // Create VueI18n instance with options
 const i18n = new VueI18n({
   locale: 'en',
   messages,
   formatFallbackMessages: true
 })
+
+const axiosConfig = axios.create({
+  baseURL: 'http://localhost:8090/api/'
+})
+Vue.prototype.$axios = axiosConfig
+
+Vue.prototype.$goRouter = function (path) {
+  this.$router.push({ name: path }).catch(err => { err = null })
+}
+
+/**
+ * Display snackbar message
+ * snack: {
+        text: '',
+        timeout: 0,
+        color: '',
+        snackbar: false
+      }
+ */
+Vue.prototype.$showError = function (message, color, timeout, thisModel) {
+  thisModel.snackbar = true
+  thisModel.text = message
+  thisModel.color = color
+  thisModel.timeout = timeout ? (timeout * 1000) : 0
+}
 
 // Define global eventHub
 Vue.prototype.$eventHub = new Vue()

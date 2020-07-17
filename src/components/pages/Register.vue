@@ -19,7 +19,7 @@
             flat
             dense
           >
-            <v-toolbar-title>{{ $t('Welcome') }}</v-toolbar-title>
+            <v-toolbar-title>{{ $t('Register') }}</v-toolbar-title>
             <v-spacer></v-spacer>
           </v-toolbar>
             <v-progress-linear
@@ -31,6 +31,16 @@
           <v-card-text>
 
             <v-form ref="form" lazy-validation>
+              <v-text-field
+                :label="$t('Name')"
+                name="user.name"
+                v-model="user.name"
+                prepend-icon="mdi-account"
+                type="text"
+                required
+                :rules="[ v =>!!v || $t('This field is required') ]"
+              ></v-text-field>
+
               <v-text-field
                 :label="$t('Email')"
                 name="user.email"
@@ -58,13 +68,13 @@
           <v-card-actions>
             <v-btn
               color="orange lighten-1"
-              @click="$goRouter('Register')"
-            >{{$t('Register')}}</v-btn>
+              @click="$goRouter('Login')"
+            >{{$t('Back')}}</v-btn>
             <v-spacer></v-spacer>
             <v-btn
               color="primary"
-              @click="handleLogin()"
-            >{{$t('Log in')}}</v-btn>
+              @click="handleRegister()"
+            >{{$t('Signup')}}</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -83,7 +93,8 @@ export default {
     return {
       user: {
         email: '',
-        password: ''
+        password: '',
+        name: ''
       },
       loading: false,
       showPassword: false,
@@ -107,12 +118,12 @@ export default {
     }
   },
   methods: {
-    handleLogin () {
+    handleRegister () {
       if (this.$refs.form.validate()) {
         this.loading = true
-        this.$store.dispatch('auth/login', this.user).then(
+        this.$store.dispatch('auth/register', this.user).then(
           () => {
-            this.$goRouter('Dashboard')
+            this.$goRouter('Login')
           },
           error => {
             this.loading = false

@@ -5,9 +5,17 @@
       app
     >
       <v-list dense>
-        <p-list-item :toPath="'Dashboard'" :iconName="'mdi-home'" :textTitle="$t('Home')" />
-        <p-list-item :toPath="'Login'" :iconName="'mdi-home'" :textTitle="$t('Log in')" />
-        <v-icon @click="test">mdi-logout</v-icon>
+        <p-list-item :toPath="'Login'" :iconName="'mdi-login'" :textTitle="$t('Log in')"  v-if="!currentUser" />
+        <p-list-item :toPath="'Register'" :iconName="'mdi-account-plus'" :textTitle="$t('Register')"  v-if="!currentUser" />
+        <p-list-item :toPath="'Dashboard'" :iconName="'mdi-home'" :textTitle="$t('Home')"  v-if="currentUser" />
+          <v-list-item link @click="logout" v-if="currentUser">
+          <v-list-item-action>
+            <v-icon>mdi-logout</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>{{$t('Logout')}}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
@@ -20,12 +28,11 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>CRUD Demo</v-toolbar-title>
       <v-spacer />
-      <v-icon @click="logout">mdi-logout</v-icon>
+      <v-icon @click="logout" v-if="currentUser">mdi-logout</v-icon>
     </v-app-bar>
 
     <v-main>
       <v-container
-        class="fill-height"
         fluid
       >
         <router-view/>
@@ -45,8 +52,10 @@ import authHeader from './services/auth-header'
 
 export default {
   name: 'App',
-  props: {
-    source: String
+  computed: {
+    currentUser () {
+      return this.$store.state.auth.user
+    }
   },
   created () {
     this.$eventHub.$on('toggleDrawer', this.toggleDrawer)
@@ -60,7 +69,7 @@ export default {
     },
     logout: function () {
       this.$store.dispatch('auth/logout', this.user).then(
-        this.$router.push({ name: 'Login' }).catch(err => { err = null })
+        this.$goRouter('Login')
       )
     },
     test: function () {
@@ -75,14 +84,3 @@ export default {
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
