@@ -3,6 +3,9 @@ import Router from 'vue-router'
 import Login from '@/components/pages/Login'
 import Dashboard from '@/components/pages/Dashboard'
 import Register from '@/components/pages/Register'
+
+import AdmUsers from '@/components/pages/admin/users/AdmUsers'
+
 import Demo from '@/components/HelloWorld'
 
 Vue.use(Router)
@@ -25,6 +28,14 @@ const router = new Router({
       path: '/dashboard',
       name: 'Dashboard',
       component: Dashboard,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/admin/users',
+      name: 'AdmUsers',
+      component: AdmUsers,
       meta: {
         requiresAuth: true
       }

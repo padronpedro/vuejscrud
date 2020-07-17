@@ -8,6 +8,8 @@
         <p-list-item :toPath="'Login'" :iconName="'mdi-login'" :textTitle="$t('Log in')"  v-if="!currentUser" />
         <p-list-item :toPath="'Register'" :iconName="'mdi-account-plus'" :textTitle="$t('Register')"  v-if="!currentUser" />
         <p-list-item :toPath="'Dashboard'" :iconName="'mdi-home'" :textTitle="$t('Home')"  v-if="currentUser" />
+        <p-list-item :toPath="'AdmUsers'" :iconName="'mdi-account-multiple'" :textTitle="$t('Users')"  v-if="currentUser" />
+
           <v-list-item link @click="logout" v-if="currentUser">
           <v-list-item-action>
             <v-icon>mdi-logout</v-icon>
