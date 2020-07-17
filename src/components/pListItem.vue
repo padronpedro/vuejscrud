@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     goToPath: function (auxToPath) {
-      this.$router.push({ name: auxToPath }).catch(err => { err = null })
+      this.$goRouter(auxToPath)
       this.$eventHub.$emit('toggleDrawer')
     }
   }
