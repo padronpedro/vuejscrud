@@ -5,7 +5,7 @@ import Dashboard from '@/components/pages/Dashboard'
 import Register from '@/components/pages/Register'
 
 import AdmUsers from '@/components/pages/admin/users/AdmUsers'
-
+import AddEditUsers from '@/components/pages/admin/users/AddEditUsers'
 import Demo from '@/components/HelloWorld'
 
 Vue.use(Router)
@@ -41,6 +41,22 @@ const router = new Router({
       }
     },
     {
+      path: '/admin/users/edit/:id',
+      name: 'EditUsers',
+      component: AddEditUsers,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/admin/users/add',
+      name: 'AddUsers',
+      component: AddEditUsers,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
       path: '/demo',
       name: 'Demo',
       component: Demo
@@ -51,7 +67,6 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     const loggedIn = localStorage.getItem('user')
-    console.log(!loggedIn)
     if (!loggedIn) {
       next('/')
     } else {
