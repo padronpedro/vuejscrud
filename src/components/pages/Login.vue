@@ -108,16 +108,19 @@ export default {
     handleLogin () {
       if (this.$refs.form.validate()) {
         this.loading = true
-        this.$store.dispatch('auth/login', this.user).then(
-          () => {
+        this.$store.dispatch('auth/login', this.user)
+          .then(() => {
+            this.loading = false
             this.$goRouter('Dashboard')
           },
           error => {
             this.loading = false
-            var aux = error.response.data.message
+            var aux = error.response ? error.response.data.message : this.$t('Error connecting')
             this.$showError(aux, '', 0, this.snack)
-          }
-        )
+          })
+          .catch(error => {
+            this.$showError(this.$t('Error') + ': ' + error, '', 3, this.snack)
+          })
       } else {
         this.$showError(this.$t('Please, complete all required fields'), '', 3, this.snack)
       }
