@@ -27,8 +27,12 @@ const axiosConfig = axios.create({
 })
 Vue.prototype.$axios = axiosConfig
 
-Vue.prototype.$goRouter = function (path) {
-  this.$router.push({ name: path }).catch(err => { err = null })
+Vue.prototype.$goRouter = function (name, params, path) {
+  if (path) {
+    this.$router.push({ path: path, params: params }).catch(err => { err = null })
+  } else {
+    this.$router.push({ name: name, params: params }).catch(err => { err = null })
+  }
 }
 
 /**
