@@ -4,7 +4,6 @@
     bottom
     :color="color ? color : 'error'"
     multi-line
-    :timeout="timeout"
   >
     {{ text }}
     <template v-slot:action="{ attrs }">
@@ -44,10 +43,6 @@ export default {
     text: {
       type: String,
       default: '',
-      required: false
-    },
-    timeout: {
-      type: Number,
       required: false
     }
   }

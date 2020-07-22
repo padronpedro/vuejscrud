@@ -35,16 +35,20 @@ Vue.prototype.$goRouter = function (path) {
  * Display snackbar message
  * snack: {
         text: '',
-        timeout: 0,
         color: '',
         snackbar: false
       }
  */
 Vue.prototype.$showError = function (message, color, timeout, thisModel) {
+  console.log('call')
   thisModel.snackbar = true
   thisModel.text = message
   thisModel.color = color
-  thisModel.timeout = timeout ? (timeout * 1000) : 0
+  if (timeout) {
+    setTimeout(() => {
+      thisModel.snackbar = false
+    }, (timeout * 1000))
+  }
 }
 
 // Define global eventHub

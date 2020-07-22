@@ -21,6 +21,11 @@
         ></v-data-table>
       </v-col>
     </v-row>
+    <p-snack-bar
+      :text="snack.text"
+      :color="snack.color"
+      :snackbar="snack.snackbar" />
+    <p-dialog-yes-no ref="confirm" />
   </v-container>
 </template>
 
@@ -43,7 +48,12 @@ export default {
           disabled: true,
           to: 'AdmUsers'
         }
-      ]
+      ],
+      snack: {
+        text: '',
+        color: '',
+        snackbar: false
+      }
     }
   },
   computed: {

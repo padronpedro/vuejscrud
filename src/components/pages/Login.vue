@@ -72,7 +72,6 @@
     <p-snack-bar
       :text="snack.text"
       :color="snack.color"
-      :timeout="snack.timeout"
       :snackbar="snack.snackbar" />
   </v-container>
 </template>
@@ -90,7 +89,6 @@ export default {
       message: '',
       snack: {
         text: '',
-        timeout: 0,
         color: '',
         snackbar: false
       }
