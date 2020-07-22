@@ -77,7 +77,7 @@ export default {
     test: function () {
       this.$axios.get('/test/admin', { headers: authHeader() })
         .then(response => {
-          console.log(response)
+          console.log('main', response)
         })
         .catch(error => {
           console.log('Get Clients error: ', error)

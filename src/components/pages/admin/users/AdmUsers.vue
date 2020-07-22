@@ -8,7 +8,7 @@
         <v-toolbar dense flat>
           <p-bread-crumbs :items="itemsBc"></p-bread-crumbs>
             <v-spacer />
-            <p-icon :iconName="'mdi-account-plus'" :iconText="$t('Add user')" :toPath="'Login'" />
+            <p-icon :iconName="'mdi-account-plus'" :iconText="$t('Add user')" :toPath="'AddUsers'" />
         </v-toolbar>
 
         <v-data-table
@@ -18,7 +18,48 @@
           :server-items-length="totalItems"
           :loading="loading"
           class="elevation-1"
-        ></v-data-table>
+        >
+          <template v-slot:item.role_name="{ item }">
+            {{ getRoleName(item) }}
+          </template>
+          <template v-slot:item.is_active="{ item }">
+              <v-chip :color="item.is_active=='1' ? 'green' : 'red'" dark>{{ item.is_active=='1' ? $t('Active') : $t('Disabled') }}</v-chip>
+          </template>
+          <template v-slot:item.actions="{ item }">
+            <v-tooltip bottom :color="'orange'">
+                <template v-slot:activator="{ on }">
+                    <v-icon
+                        v-on="on"
+                        class="mr-2"
+                        @click="editItem(item)">
+                        mdi-pencil
+                    </v-icon>
+                </template>
+                <span>{{ $t('Edit user') }}</span>
+            </v-tooltip>
+            <v-tooltip bottom :color="'orange'">
+                <template v-slot:activator="{ on }">
+                    <v-icon
+                        v-on="on"
+                        class="mr-2"
+                        @click="statusItem(item)">
+                        mdi-sync
+                    </v-icon>
+                </template>
+                <span>{{ $t('Change status') }}</span>
+            </v-tooltip>
+            <v-tooltip bottom :color="'orange'">
+                <template v-slot:activator="{ on }">
+                    <v-icon
+                        v-on="on"
+                        @click="deleteItem(item)">
+                        mdi-delete
+                    </v-icon>
+                </template>
+                <span>{{ $t('Delete user') }}</span>
+            </v-tooltip>
+        </template>
+        </v-data-table>
       </v-col>
     </v-row>
     <p-snack-bar
@@ -30,6 +71,8 @@
 </template>
 
 <script>
+import authHeader from '@/services/auth-header'
+
 export default {
   data () {
     return {
@@ -64,6 +107,7 @@ export default {
       return [
         { text: this.$t('Name'), align: 'left', value: 'name' },
         { text: this.$t('Email'), value: 'email' },
+        { text: this.$t('Role'), value: 'role_name' },
         { text: this.$t('Status'), align: 'center', value: 'is_active', width: '10%' },
         { text: this.$t('Actions'), align: 'center', sortable: false, value: 'actions', width: '14%' }
       ]
@@ -82,7 +126,69 @@ export default {
   },
   methods: {
     getDataForTable () {
-      console.log('search')
+      let dataOptions = {
+        offset: this.options.page,
+        limit: this.options.itemsPerPage,
+        sortBy: this.options.sortBy[0] || 'name',
+        sortDesc: this.options.sortDesc[0] ? 'desc' : 'asc'
+      }
+      this.$axios.get('user/datatable', { headers: authHeader(), params: dataOptions })
+        .then(response => {
+          if (response.data.status) {
+            this.items = response.data.data.rows
+            this.totalItems = response.data.data.count
+          } else {
+            this.$showError(response.data.message, '', 0, this.snack)
+          }
+        })
+        .catch(error => {
+          this.$showError(this.$t('Error getting users data') + ': ' + error, '', 0, this.snack)
+        })
+    },
+    getRoleName (item) {
+      return item.Roles ? item.Roles[0].name.toUpperCase() : ''
+    },
+    editItem (item) {
+      this.$goRouter('', null, '/admin/users/edit/' + item.id)
+    },
+    statusItem (item) {
+      let dataOptions = {
+        id: item.id
+      }
+      this.$axios.post('user/changestatus', { headers: authHeader(), params: dataOptions })
+        .then(response => {
+          if (response.data.status) {
+            this.getDataForTable()
+          } else {
+            this.$showError(response.data.message, '', 0, this.snack)
+          }
+        })
+        .catch(error => {
+          this.$showError(this.$t('Error changing users status') + ': ' + error, '', 0, this.snack)
+        })
+    },
+    deleteItem (item) {
+      this.$refs.confirm.open(
+        this.$t('Delete a user'),
+        this.$t('Do you want to delete the user: ' + item.name + ' ?'), { color: 'red', width: '500' }
+      )
+        .then((confirm) => {
+          if (confirm) {
+            this.$showError(this.$t('Deleting user. wait a moment please'), 'success', 3, this.snack)
+            this.$axios.delete('user/' + item.id, { headers: authHeader() })
+              .then(response => {
+                if (response.data.status) {
+                  this.$showError(this.$t('User successfully removed'), 'success', 3, this.snack)
+                  this.getDataForTable()
+                } else {
+                  this.$showError(response.data.message, '', 0, this.snack)
+                }
+              })
+              .catch(error => {
+                this.$showError(this.$t('Error changing users status') + ': ' + error, '', 0, this.snack)
+              })
+          }
+        })
     }
   }
 }
