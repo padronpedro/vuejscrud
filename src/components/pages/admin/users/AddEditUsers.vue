@@ -30,6 +30,7 @@
                       <v-text-field
                           v-model="password"
                           :label="$t('Password')"
+                          type="password"
                           name="password"
                           :rules="[v => !!v || $t('This field is required'), v => v.length >= 8 || $t('Min 8 characters')]"
                           required></v-text-field>
@@ -41,6 +42,16 @@
                           required
                           :rules="[v => !!v || $t('This field is required')]"
                           name="name"></v-text-field>
+                  </p-column>
+                  <p-column>
+                    <v-select
+                        v-model="role_id"
+                        :items="rolesItems"
+                        required
+                        item-text="name"
+                        item-value="id"
+                        :rules="[v => !!v || $t('This field is required')]"
+                        :label="$t('Role')"></v-select>
                   </p-column>
               </v-row>
             </v-form>
@@ -94,7 +105,9 @@ export default {
       email: '',
       password: '',
       editMode: true,
-      userId: ''
+      userId: '',
+      role_id: '',
+      rolesItems: []
     }
   },
   mounted () {
@@ -104,10 +117,47 @@ export default {
         this.editMode = false
       } else {
         this.userId = this.$route.params.id
+        this.getUserData()
       }
+      this.getRoles()
     })
   },
   methods: {
+    getRoles () {
+      this.$axios.get('user/role', { headers: authHeader() })
+        .then(response => {
+          if (response.data.status) {
+            this.rolesItems = response.data.data
+          }
+        })
+        .catch(error => {
+          console.log('Error getting Roles', error)
+        })
+    },
+    getUserData () {
+      this.$axios.get('user/' + this.userId, { headers: authHeader() })
+        .then(response => {
+          if (response.data.status) {
+            this.name = response.data.data.name
+            this.email = response.data.data.email
+            this.password = '12345678'
+            // get role
+            if (response.data.data.Roles) {
+              if (response.data.data.Roles.length > 0) {
+                this.role_id = response.data.data.Roles[0].id
+              }
+            }
+          } else {
+            this.$showError(response.data.message, '', 0, this.snack)
+            setTimeout(() => {
+              this.$goRouter('AdmUsers')
+            }, 2000)
+          }
+        })
+        .catch(error => {
+          this.$showError(this.$t('Error getting user data') + ': ' + error, '', 0, this.snack)
+        })
+    },
     goBack () {
       this.$goRouter('AdmUsers')
     },
@@ -116,32 +166,39 @@ export default {
         let dataOptions = {
           name: this.name,
           email: this.email,
-          password: this.password
+          password: this.password,
+          role_id: this.role_id
         }
 
         if (!this.editMode) {
           this.$axios.post('user', { headers: authHeader(), params: dataOptions })
             .then(response => {
               if (response.data.status) {
-                this.$showError(this.$t('User successfully added'), '', 3, this.snack)
+                this.$showError(this.$t('User successfully added'), 'success', 3, this.snack)
+                setTimeout(() => {
+                  this.$goRouter('AdmUsers')
+                }, 3000)
               } else {
-                this.$showError(response.data.message, '', 0, this.snack)
+                this.$showError(response.data.message, '', 2, this.snack)
               }
             })
             .catch(error => {
-              this.$showError(this.$t('Error getting users data') + ': ' + error, '', 0, this.snack)
+              this.$showError(this.$t('Error getting user data') + ': ' + error, '', 0, this.snack)
             })
         } else {
           this.$axios.put('user/' + this.userId, { headers: authHeader(), params: dataOptions })
             .then(response => {
               if (response.data.status) {
-                this.$showError(this.$t('User successfully modified'), '', 3, this.snack)
+                this.$showError(this.$t('User successfully modified'), 'success', 3, this.snack)
+                setTimeout(() => {
+                  this.$goRouter('AdmUsers')
+                }, 3000)
               } else {
                 this.$showError(response.data.message, '', 0, this.snack)
               }
             })
             .catch(error => {
-              this.$showError(this.$t('Error getting users data') + ': ' + error, '', 0, this.snack)
+              this.$showError(this.$t('Error getting user data') + ': ' + error, '', 0, this.snack)
             })
         }
       } else {
