@@ -1,6 +1,6 @@
 # basic-crud
 
-> Basic crud functions using vue
+> Basic crud functions using vue + nodejs + sequelize
 
 ## Build Setup
 
@@ -105,3 +105,18 @@ new Vue({
 <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
 ```
+# Running migrations and seeders
+```
+// Run Migrations
+npx sequelize-cli db:migrate
+// Run Seeders
+npx sequelize-cli db:seed:all
+```
+> Seeder will generate:
+2 - Roles: admin, user
+4 - Permissions: AddUsers, EditUsers, DeleteUsers, ManageUsers
+1- Admin user:
+ Login: a@a.com
+ Password: a
+ (All permissions assigned)
+10 - Test User: without any permissions assigned and with role: user (you must run the file ./seed.js)
