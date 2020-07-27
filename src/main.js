@@ -8,6 +8,8 @@ import VueI18n from 'vue-i18n'
 import esMessages from '@/lang/es.json'
 import store from './store'
 import axios from 'axios'
+import _ from 'lodash'
+import authHeader from '@/services/auth-header'
 
 Vue.config.productionTip = false
 
@@ -27,6 +29,19 @@ const axiosConfig = axios.create({
 })
 Vue.prototype.$axios = axiosConfig
 
+axiosConfig.interceptors.request.use(
+  config => {
+    const token = authHeader()
+    if (token) {
+      config.headers.common = token
+    }
+    return config
+  },
+  error => {
+    return Promise.reject(error)
+  }
+)
+
 Vue.prototype.$goRouter = function (name, params, path) {
   if (path) {
     this.$router.push({ path: path, params: params }).catch(err => { err = null })
@@ -44,7 +59,6 @@ Vue.prototype.$goRouter = function (name, params, path) {
       }
  */
 Vue.prototype.$showError = function (message, color, timeout, thisModel) {
-  console.log('call')
   thisModel.snackbar = true
   thisModel.text = message
   thisModel.color = color
@@ -54,6 +68,42 @@ Vue.prototype.$showError = function (message, color, timeout, thisModel) {
     }, (timeout * 1000))
   }
 }
+
+/**
+ * Check if the user has permission to access something
+ */
+Vue.prototype.$userCan = function (accessThis) {
+  if (this.$store.state.auth.user) {
+    return _.find(this.$store.state.auth.user.permissions, function (item) {
+      return item === accessThis
+    })
+  } else {
+    return false
+  }
+}
+
+/**
+ * Check if the user has this ROle
+ */
+Vue.prototype.$userRole = function (thisRole) {
+  return _.find(this.$store.state.auth.user.roles, function (item) {
+    return item === thisRole
+  })
+}
+
+/**
+ * Get current user logged
+ */
+Vue.prototype.$currentUser = function () {
+  return this.$store.state.auth.user
+}
+
+// filters
+Vue.filter('capitalize', function (value) {
+  if (!value) return ''
+  value = value.toString()
+  return value.charAt(0).toUpperCase() + value.slice(1)
+})
 
 // Define global eventHub
 Vue.prototype.$eventHub = new Vue()
