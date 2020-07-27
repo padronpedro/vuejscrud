@@ -51,8 +51,42 @@
                         item-text="name"
                         item-value="id"
                         :rules="[v => !!v || $t('This field is required')]"
-                        :label="$t('Role')"></v-select>
+                        :label="$t('Role')">
+
+                        <template slot='selection' slot-scope='{ item }'>
+                          {{ item.name | capitalize }}
+                        </template>
+                        <template slot='item' slot-scope='{ item }'>
+                          {{ item.name | capitalize }}
+                        </template>
+
+                    </v-select>
                   </p-column>
+                  <p-column>
+                        <v-select
+                            v-model="permissions"
+                            :items="permissionsItems"
+                            :label="$t('Permissions')"
+                            multiple
+                            :height="32"
+                            chips
+                            :item-text="item => item.name.replace('_',' ')"
+                            item-value="id"
+                            :hint="$t('Select the permissions for this user')"
+                            persistent-hint
+                            >
+
+                            <template v-slot:selection="{ item, index }">
+                                <v-chip small v-if="(index === 0) || (index === 1) || (index === 2)">
+                                    <span>{{ item.name }}</span>
+                                </v-chip>
+                                <span
+                                    v-if="index === 3"
+                                    class="grey--text caption"
+                                >(+{{ permissions.length - 3 }} {{$t('others')}})</span>
+                            </template>
+                        </v-select>
+                    </p-column>
               </v-row>
             </v-form>
           </v-card-text>
@@ -107,8 +141,36 @@ export default {
       editMode: true,
       userId: '',
       role_id: '',
-      rolesItems: []
+      rolesItems: [],
+      permissionsItems: [],
+      permissions: ''
     }
+  },
+  created () {
+    this.$axios.get('role/all', {}, { headers: authHeader() })
+      .then(response => {
+        if (response.data.status) {
+          this.rolesItems = response.data.data
+        }
+      })
+      .catch(error => {
+        console.log('Error getting Roles', error)
+      })
+    this.$axios.get('permission/all', {}, { headers: authHeader() })
+      .then(response => {
+        if (response.data.status) {
+          this.permissionsItems = response.data.data
+          this.permissionsItems = _.map(this.permissionsItems, function (item) {
+            return {
+              id: Number(item.id),
+              name: item.name.replace(/([A-Z])/g, ' $1')
+            }
+          })
+        }
+      })
+      .catch(error => {
+        console.log('Error getting Roles', error)
+      })
   },
   mounted () {
     this.$nextTick(function () {
@@ -124,7 +186,7 @@ export default {
   },
   methods: {
     getRoles () {
-      this.$axios.get('user/role', { headers: authHeader() })
+      this.$axios.get('user/role', {}, { headers: authHeader() })
         .then(response => {
           if (response.data.status) {
             this.rolesItems = response.data.data
@@ -135,7 +197,7 @@ export default {
         })
     },
     getUserData () {
-      this.$axios.get('user/' + this.userId, { headers: authHeader() })
+      this.$axios.get('user/' + this.userId, {}, { headers: authHeader() })
         .then(response => {
           if (response.data.status) {
             this.name = response.data.data.name
@@ -146,6 +208,11 @@ export default {
               if (response.data.data.Roles.length > 0) {
                 this.role_id = response.data.data.Roles[0].id
               }
+            }
+            if (response.data.data.Permissions) {
+              this.permissions = _.map(response.data.data.Permissions, function (item) {
+                return Number(item.id)
+              })
             }
           } else {
             this.$showError(response.data.message, '', 0, this.snack)
@@ -167,11 +234,12 @@ export default {
           name: this.name,
           email: this.email,
           password: this.password,
-          role_id: this.role_id
+          role_id: this.role_id,
+          permissions: this.permissions
         }
 
         if (!this.editMode) {
-          this.$axios.post('user', { headers: authHeader(), params: dataOptions })
+          this.$axios.post('user', { params: dataOptions }, { headers: authHeader() })
             .then(response => {
               if (response.data.status) {
                 this.$showError(this.$t('User successfully added'), 'success', 3, this.snack)
@@ -186,7 +254,7 @@ export default {
               this.$showError(this.$t('Error getting user data') + ': ' + error, '', 0, this.snack)
             })
         } else {
-          this.$axios.put('user/' + this.userId, { headers: authHeader(), params: dataOptions })
+          this.$axios.put('user/' + this.userId, { params: dataOptions }, { headers: authHeader() })
             .then(response => {
               if (response.data.status) {
                 this.$showError(this.$t('User successfully modified'), 'success', 3, this.snack)
