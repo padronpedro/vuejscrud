@@ -3,7 +3,7 @@
     <template v-slot:activator="{ on }">
       <v-btn text v-on="on" @click="btnFunction(toPath)">
         <v-icon class="mr-2">{{iconName}}</v-icon>
-          {{ iconText }}
+          {{ hideText ? '' : iconText }}
         </v-btn>
     </template>
     <span>{{ iconText }}</span>
@@ -21,6 +21,10 @@ export default {
     },
     toPath: {
       type: String
+    },
+    hideText: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
