@@ -8,7 +8,7 @@
         <v-toolbar dense flat>
           <p-bread-crumbs :items="itemsBc"></p-bread-crumbs>
             <v-spacer />
-            <p-icon :iconName="'mdi-account-plus'" :iconText="$t('Add user')" :toPath="'AddUsers'" />
+            <p-icon :iconName="'mdi-account-plus'" :iconText="$t('Add user')" :toPath="'AddUsers'" v-if="$userCan('ADDUSERS')" />
         </v-toolbar>
 
         <v-data-table
@@ -29,6 +29,7 @@
             <v-tooltip bottom :color="'orange'">
                 <template v-slot:activator="{ on }">
                     <v-icon
+                        v-if="$userCan('EDITUSERS')"
                         v-on="on"
                         class="mr-2"
                         @click="editItem(item)">
@@ -40,6 +41,7 @@
             <v-tooltip bottom :color="'orange'">
                 <template v-slot:activator="{ on }">
                     <v-icon
+                        v-if="$userCan('EDITUSERS')"
                         v-on="on"
                         class="mr-2"
                         @click="statusItem(item)">
@@ -51,6 +53,7 @@
             <v-tooltip bottom :color="'orange'">
                 <template v-slot:activator="{ on }">
                     <v-icon
+                        v-if="$userCan('DELETEUSERS')"
                         v-on="on"
                         @click="deleteItem(item)">
                         mdi-delete
@@ -71,8 +74,6 @@
 </template>
 
 <script>
-import authHeader from '@/services/auth-header'
-
 export default {
   data () {
     return {
@@ -100,14 +101,11 @@ export default {
     }
   },
   computed: {
-    currentUser () {
-      return this.$store.state.auth.user
-    },
     headers: function () {
       return [
         { text: this.$t('Name'), align: 'left', value: 'name' },
         { text: this.$t('Email'), value: 'email' },
-        { text: this.$t('Role'), value: 'role_name' },
+        { text: this.$t('Role'), value: 'role_name', sortable: false },
         { text: this.$t('Status'), align: 'center', value: 'is_active', width: '10%' },
         { text: this.$t('Actions'), align: 'center', sortable: false, value: 'actions', width: '14%' }
       ]
@@ -132,7 +130,7 @@ export default {
         sortBy: this.options.sortBy[0] || 'name',
         sortDesc: this.options.sortDesc[0] ? 'desc' : 'asc'
       }
-      this.$axios.get('user/datatable', { headers: authHeader(), params: dataOptions })
+      this.$axios.get('user/datatable', { params: dataOptions })
         .then(response => {
           if (response.data.status) {
             this.items = response.data.data.rows
@@ -155,7 +153,7 @@ export default {
       let dataOptions = {
         id: item.id
       }
-      this.$axios.post('user/changestatus', { headers: authHeader(), params: dataOptions })
+      this.$axios.post('user/changestatus', { params: dataOptions })
         .then(response => {
           if (response.data.status) {
             this.getDataForTable()
@@ -175,7 +173,7 @@ export default {
         .then((confirm) => {
           if (confirm) {
             this.$showError(this.$t('Deleting user. wait a moment please'), 'success', 3, this.snack)
-            this.$axios.delete('user/' + item.id, { headers: authHeader() })
+            this.$axios.delete('user/' + item.id)
               .then(response => {
                 if (response.data.status) {
                   this.$showError(this.$t('User successfully removed'), 'success', 3, this.snack)

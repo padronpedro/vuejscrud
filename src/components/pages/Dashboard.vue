@@ -14,13 +14,8 @@
 
 <script>
 export default {
-  computed: {
-    currentUser () {
-      return this.$store.state.auth.user
-    }
-  },
   mounted () {
-    console.log('in dashboard: ', this.currentUser)
+    console.log('in dashboard: ', this.$currentUser())
   }
 }
 </script>
