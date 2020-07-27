@@ -6,6 +6,8 @@ import Register from '@/components/pages/Register'
 
 import AdmUsers from '@/components/pages/admin/users/AdmUsers'
 import AddEditUsers from '@/components/pages/admin/users/AddEditUsers'
+import EditProfile from '@/components/pages/admin/users/EditProfile'
+
 import Demo from '@/components/HelloWorld'
 
 Vue.use(Router)
@@ -52,6 +54,14 @@ const router = new Router({
       path: '/admin/users/add',
       name: 'AddUsers',
       component: AddEditUsers,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/profile',
+      name: 'EditProfile',
+      component: EditProfile,
       meta: {
         requiresAuth: true
       }
