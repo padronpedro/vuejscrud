@@ -20,6 +20,7 @@
               <v-row>
                   <p-column>
                       <v-text-field
+                          test-id="user-email"
                           v-model="email"
                           :label="$t('Email')"
                           required
@@ -28,6 +29,7 @@
                   </p-column>
                   <p-column>
                       <v-text-field
+                          test-id="user-password"
                           v-model="password"
                           :label="$t('Password')"
                           type="password"
@@ -37,6 +39,7 @@
                   </p-column>
                   <p-column>
                       <v-text-field
+                          test-id="user-name"
                           v-model="name"
                           :label="$t('Name')"
                           required
@@ -94,7 +97,7 @@
           <v-card-actions>
             <v-btn color="warning" @click="goBack">{{ $t('Back')}}</v-btn>
             <v-spacer></v-spacer>
-            <v-btn color="primary" @click="validate">{{ editMode ? $t('Update') : $t('Save')}}</v-btn>
+            <v-btn color="primary" @click="validate" test-id="AddEditUserBtnSave">{{ editMode ? $t('Update') : $t('Save')}}</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>

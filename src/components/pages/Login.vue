@@ -34,6 +34,7 @@
               <v-text-field
                 :label="$t('Email')"
                 name="user.email"
+                test-id="user-email"
                 v-model="user.email"
                 prepend-icon="mdi-email"
                 type="text"
@@ -45,6 +46,7 @@
                 id="password"
                 :label="$t('Password')"
                 name="user.password"
+                test-id="user-password"
                 v-model="user.password"
                 prepend-icon="mdi-lock"
                 @click:append="showPassword = !showPassword"
@@ -62,6 +64,7 @@
             >{{$t('Register')}}</v-btn>
             <v-spacer></v-spacer>
             <v-btn
+              test-id="btn-login"
               color="primary"
               @click="handleLogin()"
             >{{$t('Log in')}}</v-btn>

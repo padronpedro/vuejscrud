@@ -8,10 +8,11 @@
         <v-toolbar dense flat>
           <p-bread-crumbs :items="itemsBc"></p-bread-crumbs>
             <v-spacer />
-            <p-icon :iconName="'mdi-account-plus'" :iconText="$t('Add user')" :toPath="'AddUsers'" v-if="$userCan('ADDUSERS')" />
+            <p-icon :iconName="'mdi-account-plus'" :iconText="$t('Add user')" :toPath="'AddUsers'" v-if="$userCan('ADDUSERS')" :testId="'AdminBtnAddUser'" />
         </v-toolbar>
 
         <v-data-table
+          test-id="AdmUsersDatatable"
           :headers="headers"
           :items="items"
           :options.sync="options"
@@ -23,7 +24,7 @@
             {{ getRoleName(item) }}
           </template>
           <template v-slot:item.is_active="{ item }">
-              <v-chip :color="item.is_active=='1' ? 'green' : 'red'" dark>{{ item.is_active=='1' ? $t('Active') : $t('Disabled') }}</v-chip>
+              <v-chip :color="item.is_active=='1' ? 'green' : 'red'" dark :test-id="item.email">{{ item.is_active=='1' ? $t('Active') : $t('Disabled') }}</v-chip>
           </template>
           <template v-slot:item.actions="{ item }">
             <v-tooltip bottom :color="'orange'">
@@ -32,6 +33,7 @@
                         v-if="$userCan('EDITUSERS')"
                         v-on="on"
                         class="mr-2"
+                        :test-id="'AdmUserBtnEdit-'+item.email"
                         @click="editItem(item)">
                         mdi-pencil
                     </v-icon>
@@ -44,6 +46,7 @@
                         v-if="$userCan('EDITUSERS')"
                         v-on="on"
                         class="mr-2"
+                        :test-id="'AdmUserBtnChgStatus-'+item.email"
                         @click="statusItem(item)">
                         mdi-sync
                     </v-icon>
@@ -55,6 +58,7 @@
                     <v-icon
                         v-if="$userCan('DELETEUSERS')"
                         v-on="on"
+                        :test-id="'AdmUserBtnDelete-'+item.email"
                         @click="deleteItem(item)">
                         mdi-delete
                     </v-icon>

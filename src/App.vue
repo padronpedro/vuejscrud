@@ -8,7 +8,7 @@
         <p-list-item :toPath="'Login'" :iconName="'mdi-login'" :textTitle="$t('Log in')"  v-if="!$currentUser()" />
         <p-list-item :toPath="'Register'" :iconName="'mdi-account-plus'" :textTitle="$t('Register')"  v-if="!$currentUser()" />
         <p-list-item :toPath="'Dashboard'" :iconName="'mdi-home'" :textTitle="$t('Home')"  v-if="$currentUser()" />
-        <p-list-item :toPath="'AdmUsers'" :iconName="'mdi-account-multiple'" :textTitle="$t('Users')"  v-if="$currentUser() && $userCan('MANAGEUSERS') && $userRole('ROLE_ADMIN')" />
+        <p-list-item :toPath="'AdmUsers'" :iconName="'mdi-account-multiple'" :textTitle="$t('Users')"  v-if="$currentUser() && $userCan('MANAGEUSERS') && $userRole('ROLE_ADMIN')" test-id="MenuAdmUsers" />
         <v-divider></v-divider>
         <v-list-item link @click="logout" v-if="$currentUser()">
           <v-list-item-action>
@@ -30,7 +30,7 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>CRUD Demo</v-toolbar-title>
       <v-spacer />
-      <p-icon :toPath="'EditProfile'" :iconName="'mdi-account'" :iconText="$t('Profile')" :hideText="true"  v-if="$currentUser()" />
+      <p-icon :toPath="'EditProfile'" :iconName="'mdi-account'" :iconText="$t('Profile')" :hideText="true"  v-if="$currentUser()" :testId="'UserLogged'" />
       <v-icon @click="logout" v-if="$currentUser()">mdi-logout</v-icon>
     </v-app-bar>
 

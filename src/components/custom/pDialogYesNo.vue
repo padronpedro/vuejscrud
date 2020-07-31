@@ -32,6 +32,7 @@
                 <v-btn
                     color="primary darken-1"
                     text
+                    test-id="DialogContinue"
                     @click.native="agree">
                     {{ $t('Continue') }}
                 </v-btn>

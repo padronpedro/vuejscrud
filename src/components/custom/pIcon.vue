@@ -1,7 +1,7 @@
 <template>
   <v-tooltip bottom color="orange">
     <template v-slot:activator="{ on }">
-      <v-btn text v-on="on" @click="btnFunction(toPath)">
+      <v-btn text v-on="on" @click="btnFunction(toPath)" :test-id="testId">
         <v-icon class="mr-2">{{iconName}}</v-icon>
           {{ hideText ? '' : iconText }}
         </v-btn>
@@ -25,6 +25,10 @@ export default {
     hideText: {
       type: Boolean,
       default: false
+    },
+    testId: {
+      type: String,
+      default: ''
     }
   },
   methods: {
