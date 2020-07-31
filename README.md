@@ -120,3 +120,9 @@ npx sequelize-cli db:seed:all
  Password: a
  (All permissions assigned)
 10 - Test User: without any permissions assigned and with role: user (you must run the file ./seed.js)
+
+# To run E2E test (using testcafe package)
+```
+npm run testcafe
+```
+
