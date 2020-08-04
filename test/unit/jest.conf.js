@@ -17,6 +17,9 @@ module.exports = {
   testPathIgnorePatterns: [
     '<rootDir>/test/e2e'
   ],
+  modulePathIgnorePatterns: [
+    '<rootDir>/test/testcafe'
+  ],
   snapshotSerializers: ['<rootDir>/node_modules/jest-serializer-vue'],
   setupFiles: ['<rootDir>/test/unit/setup'],
   mapCoverage: true,
@@ -26,5 +29,6 @@ module.exports = {
     '!src/main.js',
     '!src/router/index.js',
     '!**/node_modules/**'
-  ]
+  ],
+  "testURL": "http://localhost:8080/"
 }
