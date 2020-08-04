@@ -94,7 +94,8 @@ export default {
         text: '',
         color: '',
         snackbar: false
-      }
+      },
+      logged: false
     }
   },
   computed: {
@@ -104,6 +105,7 @@ export default {
   },
   created () {
     if (this.loggedIn) {
+      this.logged = true
       this.$goRouter('Dashboard')
     }
   },
@@ -114,6 +116,7 @@ export default {
         this.$store.dispatch('auth/login', this.user)
           .then(() => {
             this.loading = false
+            this.logged = true
             this.$goRouter('Dashboard')
           },
           error => {
