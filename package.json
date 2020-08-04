@@ -25,6 +25,7 @@
     "vuex": "^3.5.1"
   },
   "devDependencies": {
+    "@vue/test-utils": "^1.0.3",
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
     "babel-eslint": "^8.2.1",
@@ -58,6 +59,7 @@
     "fibers": "^5.0.0",
     "file-loader": "^1.1.4",
     "friendly-errors-webpack-plugin": "^1.6.1",
+    "handlebars": "^4.5.0",
     "html-webpack-plugin": "^2.30.1",
     "jest": "^22.0.4",
     "jest-serializer-vue": "^0.3.0",
@@ -78,7 +80,7 @@
     "testcafe": "^1.8.8",
     "uglifyjs-webpack-plugin": "^1.1.1",
     "url-loader": "^0.5.8",
-    "vue-jest": "^1.0.2",
+    "vue-jest": "^1.4.0",
     "vue-loader": "^13.3.0",
     "vue-style-loader": "^3.0.1",
     "vue-template-compiler": "^2.5.2",
