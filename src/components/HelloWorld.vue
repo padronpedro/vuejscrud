@@ -8,8 +8,8 @@
 export default {
   data () {
     return {
-      message: 'ejemplo',
+      message: 'ejemplo'
     }
-  },
+  }
 }
 </script>
