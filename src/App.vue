@@ -3,6 +3,8 @@
     <v-navigation-drawer
       v-model="drawer"
       app
+      absolute
+      temporary
     >
       <v-list dense>
         <p-list-item :toPath="'Login'" :iconName="'mdi-login'" :textTitle="$t('Log in')"  v-if="!$currentUser()" />
