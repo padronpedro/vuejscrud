@@ -25,7 +25,7 @@ const i18n = new VueI18n({
 })
 
 const axiosConfig = axios.create({
-  baseURL: 'http://localhost:8090/api/'
+  baseURL: process.env.BACKEND_URL
 })
 Vue.prototype.$axios = axiosConfig
 
