@@ -32,6 +32,7 @@
 
             <v-form ref="form" lazy-validation>
               <v-text-field
+                autocomplete="new-password"
                 :label="$t('Name')"
                 name="user.name"
                 v-model="user.name"
@@ -42,6 +43,7 @@
               ></v-text-field>
 
               <v-text-field
+                autocomplete="new-password"
                 :label="$t('Email')"
                 name="user.email"
                 v-model="user.email"
@@ -52,6 +54,7 @@
               ></v-text-field>
 
               <v-text-field
+                autocomplete="new-password"
                 id="password"
                 :label="$t('Password')"
                 name="user.password"

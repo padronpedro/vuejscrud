@@ -28,6 +28,7 @@
                   </p-column>
                   <p-column>
                       <v-text-field
+                          autocomplete="new-password"
                           v-model="password"
                           :label="$t('Password')"
                           type="password"

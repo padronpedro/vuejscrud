@@ -29,6 +29,7 @@
                   </p-column>
                   <p-column>
                       <v-text-field
+                          autocomplete="new-password"
                           test-id="user-password"
                           v-model="password"
                           :label="$t('Password')"
