@@ -42,6 +42,21 @@ axiosConfig.interceptors.request.use(
   }
 )
 
+axiosConfig.interceptors.response.use(
+  (response) => {
+    return response
+  },
+  (error) => {
+    if (error.response.status === 401) {
+      store.dispatch('auth/logout', this.user).then(
+        this.$goRouter('Login')
+      )
+    } else {
+      return Promise.reject(error)
+    }
+  }
+)
+
 Vue.prototype.$goRouter = function (name, params, path) {
   if (path) {
     this.$router.push({ path: path, params: params }).catch(err => { err = null })
