@@ -111,7 +111,6 @@
 </template>
 
 <script>
-import authHeader from '@/services/auth-header'
 import _ from 'lodash'
 
 export default {
@@ -151,7 +150,7 @@ export default {
     }
   },
   created () {
-    this.$axios.get('role/all', {}, { headers: authHeader() })
+    this.$axios.get('role/all', {})
       .then(response => {
         if (response.data.status) {
           this.rolesItems = response.data.data
@@ -160,7 +159,7 @@ export default {
       .catch(error => {
         console.log('Error getting Roles', error)
       })
-    this.$axios.get('permission/all', {}, { headers: authHeader() })
+    this.$axios.get('permission/all', {})
       .then(response => {
         if (response.data.status) {
           this.permissionsItems = response.data.data
@@ -190,7 +189,7 @@ export default {
   },
   methods: {
     getRoles () {
-      this.$axios.get('user/role', {}, { headers: authHeader() })
+      this.$axios.get('user/role', {})
         .then(response => {
           if (response.data.status) {
             this.rolesItems = response.data.data
@@ -201,7 +200,7 @@ export default {
         })
     },
     getUserData () {
-      this.$axios.get('user/' + this.userId, {}, { headers: authHeader() })
+      this.$axios.get('user/' + this.userId, {})
         .then(response => {
           if (response.data.status) {
             this.name = response.data.data.name
@@ -243,7 +242,7 @@ export default {
         }
 
         if (!this.editMode) {
-          this.$axios.post('user', { params: dataOptions }, { headers: authHeader() })
+          this.$axios.post('user', { params: dataOptions })
             .then(response => {
               if (response.data.status) {
                 this.$showError(this.$t('User successfully added'), 'success', 3, this.snack)
@@ -258,7 +257,7 @@ export default {
               this.$showError(this.$t('Error getting user data') + ': ' + error, '', 0, this.snack)
             })
         } else {
-          this.$axios.put('user/' + this.userId, { params: dataOptions }, { headers: authHeader() })
+          this.$axios.put('user/' + this.userId, { params: dataOptions })
             .then(response => {
               if (response.data.status) {
                 this.$showError(this.$t('User successfully modified'), 'success', 3, this.snack)

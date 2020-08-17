@@ -64,7 +64,6 @@
 </template>
 
 <script>
-import authHeader from '@/services/auth-header'
 import _ from 'lodash'
 
 export default {
@@ -105,7 +104,7 @@ export default {
   },
   methods: {
     getUserData () {
-      this.$axios.get('user/' + this.userId, {}, { headers: authHeader() })
+      this.$axios.get('user/' + this.userId, {})
         .then(response => {
           if (response.data.status) {
             this.name = response.data.data.name
@@ -134,7 +133,7 @@ export default {
           id: this.userId
         }
 
-        this.$axios.put('profile', { params: dataOptions }, { headers: authHeader() })
+        this.$axios.put('profile', { params: dataOptions })
           .then(response => {
             if (response.data.status) {
               this.$showError(this.$t('Your information was successfully added'), 'success', 3, this.snack)
