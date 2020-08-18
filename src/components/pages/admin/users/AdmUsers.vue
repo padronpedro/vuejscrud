@@ -24,7 +24,7 @@
             {{ getRoleName(item) }}
           </template>
           <template v-slot:item.is_active="{ item }">
-              <v-chip :color="item.is_active=='1' ? 'green' : 'red'" dark :test-id="item.email">{{ item.is_active=='1' ? $t('Active') : $t('Disabled') }}</v-chip>
+              <v-chip :color="item.is_active=='1' ? 'green' : 'red'" dark :test-id="'Status-'+item.email">{{ item.is_active=='1' ? $t('Active') : $t('Disabled') }}</v-chip>
           </template>
           <template v-slot:item.actions="{ item }">
             <v-tooltip bottom :color="'orange'">

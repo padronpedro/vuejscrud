@@ -49,6 +49,7 @@
                   </p-column>
                   <p-column>
                     <v-select
+                        test-id="RoleTest"
                         v-model="role_id"
                         :items="rolesItems"
                         required
@@ -68,6 +69,7 @@
                   </p-column>
                   <p-column>
                         <v-select
+                            test-id="PermissionTest"
                             v-model="permissions"
                             :items="permissionsItems"
                             :label="$t('Permissions')"

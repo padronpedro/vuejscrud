@@ -33,7 +33,7 @@
       <v-toolbar-title>CRUD Demo</v-toolbar-title>
       <v-spacer />
       <p-icon :toPath="'EditProfile'" :iconName="'mdi-account'" :iconText="$t('Profile')" :hideText="true"  v-if="$currentUser()" :testId="'UserLogged'" />
-      <v-icon @click="logout" v-if="$currentUser()">mdi-logout</v-icon>
+      <v-icon @click="logout" v-if="$currentUser()" test-id="btn-logout">mdi-logout</v-icon>
     </v-app-bar>
 
     <v-main>
