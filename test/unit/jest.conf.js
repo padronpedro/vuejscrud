@@ -15,7 +15,8 @@ module.exports = {
     '.*\\.(vue)$': '<rootDir>/node_modules/vue-jest'
   },
   testPathIgnorePatterns: [
-    '<rootDir>/test/e2e'
+    '<rootDir>/test/e2e',
+    '<rootDir>/cypress'
   ],
   modulePathIgnorePatterns: [
     '<rootDir>/test/testcafe'
