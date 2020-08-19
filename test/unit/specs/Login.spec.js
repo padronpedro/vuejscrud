@@ -5,7 +5,6 @@ import pSnackBar from '@/components/custom/pSnackBar'
 import Vuex from 'vuex'
 import { auth } from '@/store/auth.module'
 
-
 describe('Login.vue', () => {
   let localVue;
   let vuetify;
@@ -38,9 +37,10 @@ describe('Login.vue', () => {
   });
 
   it('should login', async () => {
-    wrapper.vm.$data.user.email = 'a@a.com'
-    wrapper.vm.$data.user.password = 'a'
+    await wrapper.find('[name="user.email"]').setValue("a@a.com")
+    await wrapper.find('[name="user.password"]').setValue("a")
     wrapper.find('[test-id="btn-login"]').trigger('click')
-    expect(wrapper.vm.$data.logged).toBe(false)
+    await localVue.nextTick();
+    expect(wrapper.vm.$data.logged).toBe(true)
   })
 });
