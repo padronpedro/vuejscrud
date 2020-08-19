@@ -2,6 +2,7 @@
     <v-breadcrumbs :items="items">
         <template v-slot:item="props">
             <v-breadcrumbs-item
+                :test-id="'bc-id-' + props.item.text"
                 @click="redirectTo(props.item)"
                 :class="[props.item.disabled ? 'disabled' : '',props.item.disabled ? '' : 'with-cursor']"
             >
