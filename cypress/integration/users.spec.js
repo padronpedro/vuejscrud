@@ -1,13 +1,15 @@
-beforeEach(() => {
-  cy.visit('http://localhost:8080')
-  cy.get('[test-id="user-email"]')
-    .type('a@a.com')
-  cy.get('[test-id="user-password"')
-    .type('a')
-  cy.get('[test-id="btn-login"]').click()
-})
+const testUsers = require('../fixtures/myusers')
 
 describe('CRUD User Module', () => {
+  beforeEach(() => {
+    cy.visit('http://localhost:8080')
+    cy.get('[test-id="user-email"]')
+      .type(testUsers[0].email)
+    cy.get('[test-id="user-password"')
+      .type(testUsers[0].password)
+    cy.get('[test-id="btn-login"]').click()
+  })
+
   it('should display users list', () => {
     cy.get('.v-app-bar__nav-icon').click()
     cy.get('[test-id="MenuAdmUsers"').click()
@@ -23,14 +25,14 @@ describe('CRUD User Module', () => {
     cy.get('.v-breadcrumbs__item').should('contain','Add User')
 
     cy.get('[test-id="user-email"]')
-      .type('test@test.com')
-      .should('have.value', 'test@test.com')
+      .type(testUsers[1].email)
+      .should('have.value', testUsers[1].email)
 
     cy.get('[test-id="user-password"]')
-      .type('12345678')
+      .type(testUsers[1].password)
 
     cy.get('[test-id="user-name"]')
-      .type('user test')
+      .type(testUsers[1].name)
 
     // cy.get('[test-id="RoleSelect"]').parent().click()
     //   .type('{downarrow}')
@@ -51,10 +53,10 @@ describe('CRUD User Module', () => {
     cy.get('[test-id="MenuAdmUsers"]').click()
     cy.url().should('include','admin/users')
 
-    cy.get('[test-id="AdmUserBtnEdit-test@test.com"]').click()
+    cy.get('[test-id="AdmUserBtnEdit-'+testUsers[1].email+'"]').click()
     cy.get('.v-breadcrumbs__item').should('contain','Edit User')
 
-    cy.get('[test-id="user-email"]').should('have.value','test@test.com')
+    cy.get('[test-id="user-email"]').should('have.value',testUsers[1].email)
 
     cy.get('[test-id="user-name"]')
       .type('user test new name')
@@ -70,11 +72,11 @@ describe('CRUD User Module', () => {
     cy.url().should('include','admin/users')
 
     let aux = '';
-    cy.get('[test-id="Status-test@test.com"]')
+    cy.get('[test-id="Status-'+testUsers[1].email+'"]')
       .then(($value) => {
         aux = $value.text()
-        cy.get('[test-id="AdmUserBtnChgStatus-test@test.com"]').click()
-        cy.get('[test-id="Status-test@test.com"]').should('not.equal', aux)
+        cy.get('[test-id="AdmUserBtnChgStatus-'+testUsers[1].email+'"]').click()
+        cy.get('[test-id="Status-'+testUsers[1].email+'"]').should('not.equal', aux)
       })
   })
 
@@ -83,15 +85,16 @@ describe('CRUD User Module', () => {
     cy.get('[test-id="MenuAdmUsers"]').click()
     cy.url().should('include','admin/users')
 
-    cy.get('[test-id="AdmUserBtnDelete-test@test.com"]').click()
+    cy.get('[test-id="AdmUserBtnDelete-'+testUsers[1].email+'"]').click()
     cy.get('[test-id="DialogContinue"]').click()
 
-    cy.get('[test-id="AdmUserBtnDelete-test@test.com"]').should('not.exist')
+    cy.get('[test-id="AdmUserBtnDelete-'+testUsers[1].email+'"]').should('not.exist')
   })
 
-})
 
-afterEach(() => {
-  // runs after each test in the block
-  cy.get('[test-id="btn-logout"]').click()
+  afterEach(() => {
+    // runs after each test in the block
+    cy.get('[test-id="btn-logout"]').click()
+  })
+
 })
