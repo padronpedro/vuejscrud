@@ -75,6 +75,7 @@
             >{{$t('Back')}}</v-btn>
             <v-spacer></v-spacer>
             <v-btn
+              test-id="btn-register"
               color="primary"
               @click="handleRegister()"
             >{{$t('Signup')}}</v-btn>
