@@ -14,6 +14,10 @@ config.mocks['$showError'] = (message, color, timeout, params) => {
 config.mocks['$goRouter'] = (path) => {
   return path
 }
+// mock for $userCan
+config.mocks['$userCan'] = (permission) => {
+  return true
+}
 
 Vue.use(Vuetify);
 
